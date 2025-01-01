@@ -1,0 +1,147 @@
+---
+title: "analysis"
+output: html_document
+date: "2025-01-01"
+---
+
+website origin data 
+https://www.kaggle.com/datasets/spscientist/students-performance-in-exams/code
+
+
+
+Random notes and thoughts
+
+Using if_else changes the TRUE/FALSE to numerical if T/F == 1/0
+should literally put "0"/ "1". should change as.factor() afterwards
+
+
+
+
+packages
+
+```{r}
+pacman::p_load(
+  rio,          # File import
+  here,         # File locator
+  skimr,        # get overview of data
+  tidyverse,    # data management + ggplot2 graphics, 
+  gtsummary,    # summary statistics and tests
+  rstatix,      # statistics
+  corrr,        # correlation analayis for numeric variables
+  janitor,      # adding totals and percents to tables
+  flextable     # converting tables to HTML
+)
+```
+
+importing data
+
+```{r}
+exams <- import("StudentsPerformance.csv")
+```
+
+```{r}
+skim(exams)
+```
+
+Looks like we have 5 categorical columns and 3 continuous
+
+Look like no missing data either :)
+
+TO DO: clean the categorical data: make one-hot-encoding
+
+First let's clean the column names
+
+```{r}
+exams <- exams %>% janitor::clean_names()
+```
+
+```{r}
+colnames(exams)
+```
+
+Checking unique values before re-coding
+
+```{r}
+unique(exams$gender)
+```
+
+```{r}
+exams$gender <- as.factor(if_else(exams$gender=="male",1,0))
+```
+
+checking values in race_ethnicity
+
+```{r}
+unique(exams$race_ethnicity)
+```
+
+
+
+trees.genus <- trees %>%
+               mutate(Genus = case_when(               # creates the genus column and specifies conditions
+                  grepl("Acer", LatinName) ~ "Acer",
+                  grepl("Fraxinus", LatinName) ~ "Fraxinus"
+
+
+creating race_ethnicity_f
+
+```{r}
+exams <- exams %>% 
+  mutate(race_ethnicity_f = case_when(
+    race_ethnicity == "group A" ~ 0,
+    race_ethnicity == "group B" ~ 1,
+    race_ethnicity == "group C" ~ 2,
+    race_ethnicity == "group D" ~ 3,
+    race_ethnicity == "group E" ~ 4,
+  ))
+```
+
+changing into factor
+
+```{r}
+exams$race_ethnicity_f <- as.factor(exams$race_ethnicity_f)
+```
+
+
+```{r}
+unique(exams$parental_level_of_education)
+```
+
+
+PERHAPS CHANGES THIS LOOK INTO R4EPI LESSON!
+
+
+```{r}
+exams$parental_level_of_education <- exams %>% 
+  mutate(parental_level_of_education = case_when(
+    parental_level_of_education == "some high school"   ~ 0,
+    parental_level_of_education == "high school"        ~ 1,
+    parental_level_of_education == "some college"       ~ 2,
+    parental_level_of_education == "associate's degree" ~ 3,
+    parental_level_of_education == "bachelor's degree"  ~ 4,
+    parental_level_of_education == "master's degree"    ~ 5
+  ))
+```
+
+exams
+
+
+
+```{r}
+unique(exams$lunch)
+```
+
+```{r}
+unique(exams$test_preparation_course)
+```
+
+
+
+
+
+
+
+
+
+
+
