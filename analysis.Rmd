@@ -13,9 +13,11 @@ https://www.sthda.com/english/wiki/normality-test-in-r
 resource on linear regression
 https://www.sthda.com/english/articles/39-regression-model-diagnostics/161-linear-regression-assumptions-and-diagnostics-in-r-essentials/
 
+resource on basic plots
+https://environmentalcomputing.net/graphics/ggplot/ggplot-basics/
 
 
-This is fictional data
+*This is fictional data*
 
 Random notes and thoughts
 
@@ -34,13 +36,14 @@ pacman::p_load(
   corrr,        # correlation analayis for numeric variables
   janitor,      # adding totals and percents to tables
   flextable,    # converting tables to HTML
-  ggpubr        # easy ggplot2-based data visualization
+  ggpubr,        # easy ggplot2-based data visualization
+  corrplot      # make correlation matrix
 )
 ```
 
 importing data
 
-```{r}
+```{r import data}
 exams <- import("StudentsPerformance.csv")
 ```
 
@@ -215,20 +218,25 @@ can individually go through the residual and assumption plots with
 plot(model_math, 1), plot(model_math,2), ....
 
 
+## making plots for fun 
 
 
+```{r boxplot of math score by gender}
+ggplot(exams) + geom_boxplot(aes(y=math_score, x=race_ethnicity))
+```
 
 
+```{r histogram of math scores}
+ggplot(exams) + geom_histogram(aes(math_score), bins=30)
+```
 
+plot3 <- ggplot(iris, aes(Sepal.Length, Petal.Length)) +
+  geom_point()
 
-
-
-
-
-
-
-
-
+```{r scatterplot of reading and writing score}
+ggplot(exams) + geom_point(aes(x=reading_score, y=writing_score, color=gender)) +
+  theme_classic()
+```
 
 
 
